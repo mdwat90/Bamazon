@@ -24,3 +24,9 @@ INSERT INTO products (product_name, department_name, price, stock_quantity) valu
 INSERT INTO products (product_name, department_name, price, stock_quantity) values ('Coffee Maker', 'Kitchen', 40, 5);
 INSERT INTO products (product_name, department_name, price, stock_quantity) values ('iPad', 'Electronics', 250, 4);
 
+CREATE TABLE departments (
+    department_id INTEGER(11) AUTO_INCREMENT NOT NULL,
+    department_name VARCHAR(100),
+    over_head_costs INTEGER(11),
+    PRIMARY KEY (department_id)
+);

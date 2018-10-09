@@ -39,7 +39,7 @@ connection.query("SELECT product_name, price, stock_quantity FROM products", fun
         }, ]).then(function (response) {
             console.log("Your purchase quantity: " + response.quantity);
 
-            connection.query("SELECT stock_quantity FROM products WHERE product_name=?", [product], function (err, res) {
+            connection.query("SELECT product_sales, price, stock_quantity FROM products WHERE product_name=?", [product], function (err, res) {
                 if (err) throw err;
                 console.log("Stock quantity: " + res[0].stock_quantity);
                 if (parseInt(response.quantity) > res[0].stock_quantity) {
@@ -47,15 +47,16 @@ connection.query("SELECT product_name, price, stock_quantity FROM products", fun
                 } else {
                     connection.query("UPDATE products SET ? WHERE ?", [{stock_quantity: (res[0].stock_quantity - parseInt(response.quantity))}, {product_name:[product]}], function (err, res) {
                         if (err) throw err;
-                        // console.log(res);
                     });
                     console.log("New stock quantity: " + (res[0].stock_quantity - parseInt(response.quantity)));
                     connection.query("SELECT price FROM products WHERE product_name=?", [product], function (err, res) {
                         if (err) throw err;
-                        // console.log(product);
                         console.log("Cost today: $" + (res[0].price * parseInt(response.quantity)));
                         console.log("Purchase Complete");
                         console.log("Thank you for your purchase!");
+                    });
+                    connection.query("UPDATE products SET ? WHERE ?", [{product_sales: (res[0].price * parseInt(response.quantity))}, {product_name:[product]}], function (err, res) {
+                        if (err) throw err;
                     });
                 }
             });
